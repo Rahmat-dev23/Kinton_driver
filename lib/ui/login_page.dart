@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 sessionManager.set("token", token);
                 sessionManager.set("isLoggedIn", true);
 
-                return HomePage();
+                return LayoutNavigationBar(accessToken: token);
               }));
         } else {
           if (!context.mounted) return;
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         sessionManager.set("token", token);
         sessionManager.set("isLoggedIn", true);
 
-        return LayoutNavigationBar(accesstoken: token);
+        return LayoutNavigationBar(accessToken: token,);
       }));
     }
   }
