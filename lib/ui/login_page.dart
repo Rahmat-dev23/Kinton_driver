@@ -48,9 +48,9 @@ class _LoginPageState extends State<LoginPage> {
           if (!context.mounted) return;
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-                // var sessionManager = SessionManager();
-                // sessionManager.set("token", token);
-                // sessionManager.set("isLoggedIn", true);
+                var sessionManager = SessionManager();
+                sessionManager.set("token", token);
+                sessionManager.set("isLoggedIn", true);
 
                 return HomePage();
               }));
@@ -122,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(15),
                   child: Card(
+                      color: Colors.white,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(15))),
                       child: Padding(
@@ -139,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                       fontSize: 20),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(top: 15),
+                                  margin: const EdgeInsets.only(top: 10),
                                   child: TextFormField(
                                     controller: emailController,
                                     keyboardType: TextInputType.emailAddress,
@@ -149,7 +150,6 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                                 Container(
-                                  color: Colors.white,
                                   margin: const EdgeInsets.only(top: 10),
                                   child: TextFormField(
                                     obscureText: showPassword,
