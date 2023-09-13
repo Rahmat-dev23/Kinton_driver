@@ -7,7 +7,7 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: io.codemagic.firebaseCrash
+        bundle_identifier: com.ngodev.kinton_driver
       vars:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
