@@ -5,7 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:kinton_driver/firebase_options.dart';
 import 'package:kinton_driver/helpers/HexColor.dart';
-import 'package:kinton_driver/ui/home_page.dart';
+import 'package:kinton_driver/ui/login_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }

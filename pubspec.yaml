@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^2.15.1
   http: ^1.1.0
   intl: ^0.18.1
+  flutter_session_manager: ^1.0.3
 
 dev_dependencies:
   flutter_test:
