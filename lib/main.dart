@@ -3,10 +3,8 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:kinton_driver/helpers/HexColor.dart';
 
-void main() {
-  runApp(const MyApp());
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +23,7 @@ class MyApp extends StatelessWidget {
       return true;
     };
 
-  // This widget is the root of your application.
+    runApp(const MyApp());
 
 }
 
@@ -50,7 +48,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
         useMaterial3: true,
       ),
       home:  TextButton(
