@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kinton_driver/helpers/HexColor.dart';
 import 'package:kinton_driver/ui/menu/home_page.dart';
 import 'package:kinton_driver/ui/menu/income_page.dart';
 
@@ -39,6 +40,7 @@ class _LayoutNavigationBarState extends State<LayoutNavigationBar> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: HexColor("#ef9904"),
         currentIndex: _currentIndex,
         onTap: onBarTapped,
         items: const [

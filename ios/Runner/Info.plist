@@ -46,7 +46,11 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Aktifkan Lokasi Anda</string>
+	<string>Kinton Driver butuh akses lokasi di latar belakang</string>
+	<key>NSLocationAlwaysInUseUsageDescription</key>
+  	<string>Kinton Driver butuh akses lokasi ketika latar belakang</string>
+  	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+     <string>Kinton Driver butuh akses lokasi ketika latar belakang</string>
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsLocalNetworking</key>

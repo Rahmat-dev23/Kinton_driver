@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:kinton_driver/firebase_options.dart';
 import 'package:kinton_driver/helpers/HexColor.dart';
@@ -20,6 +21,9 @@ Future main() async {
     return true;
   };
 
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+
+
   runApp(const MyApp());
 
 }
@@ -36,8 +40,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Kinton Driver',
       theme: ThemeData(
+        primaryColor: HexColor("#ef9904"),
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see

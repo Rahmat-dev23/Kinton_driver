@@ -25,7 +25,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   LatLng? _currentPosition;
   var collection = FirebaseFirestore.instance;
   LatLng basePosition = const LatLng(-3.2087078074640756, 104.64408488084912);
@@ -51,10 +50,14 @@ class _HomePageState extends State<HomePage> {
     _followCurrentLocationStreamController = StreamController<double?>();
   }
 
-  Future<PermissionStatus> checkPermission() async {
-    final status = await Permission.location.request();
+  Future<void> checkPermission(PermissionWithService location, context) async {
+    final status = await location.request();
 
-    return status;
+    if (status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi diizinkan")));
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi tidak diizinkan")));
+    }
   }
 
   getLocation() async {
@@ -122,6 +125,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: false,
           title: FutureBuilder(
             future: getUserData(),
             builder:
@@ -158,87 +162,85 @@ class _HomePageState extends State<HomePage> {
           ),
           backgroundColor: HexColor("#ef9904"),
         ),
-        body: FutureBuilder(future: checkPermission(), builder: (context,snapshot){
-
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(snapshot.data.toString())));
-          return FutureBuilder(
-            future: _getCurrentLocationFuture,
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              return Stack(
-                fit: StackFit.loose,
-                children: [
-                  FlutterMap(
-                    options: MapOptions(
-                        maxZoom: 19,
-                        minZoom: 5,
-                        zoom: 16,
-                        center: _currentPosition,
-                        onPositionChanged:
-                            (MapPosition position, bool hasGesture) {
-                          if (hasGesture &&
-                              _followOnLocationUpdate !=
-                                  FollowOnLocationUpdate.never) {
-                            setState(() {
-                              _followOnLocationUpdate =
-                                  FollowOnLocationUpdate.never;
-                            });
-                          }
-                        }),
-                    nonRotatedChildren: [
-                      Positioned(
-                        right: 20,
-                        top: 20,
-                        child: FloatingActionButton(
-                            backgroundColor: Colors.white,
-                            onPressed: () {
-                              // Follow the location marker on the map when location updated until user interact with the map.
-                              setState(
-                                    () => _followOnLocationUpdate =
-                                    FollowOnLocationUpdate.always,
-                              );
-                              // Follow the location marker on the map and zoom the map to level 18.
-                              _followCurrentLocationStreamController.add(18);
-                            },
-                            child: Icon(
-                              Icons.my_location,
-                              color: HexColor("#ef9904"),
-                            )),
-                      ),
-                    ],
-                    children: [
-                      TileLayer(
-                        urlTemplate:
-                        "https://api.mapbox.com/styles/v1/kinton/clfnisen4000001rrhl74psie/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia2ludG9uIiwiYSI6ImNsMmNzb3ptMTAyODczbHA3c2UyMGlpaHkifQ.Y3y9ZhRTEf5pBN1fjlRrrg",
-                        additionalOptions: const {
-                          'mapStyleId': AppConstants.mapboxStyleId,
-                          'accessToken': AppConstants.mapboxAccessToken,
-                        },
-                      ),
-                      CurrentLocationLayer(
-                        followCurrentLocationStream: _followCurrentLocationStreamController.stream,
-                        followOnLocationUpdate: _followOnLocationUpdate,
-                        turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
-                        style:  LocationMarkerStyle(
-                          marker: const DefaultLocationMarker(
-                            color: Colors.white,
-                            child: Icon(
-                              Icons.navigation,
-                              color: Colors.blue,
-                            ),
+        body: FutureBuilder(
+          future: _getCurrentLocationFuture,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            checkPermission(Permission.location, context);
+            return Stack(
+              fit: StackFit.loose,
+              children: [
+                FlutterMap(
+                  options: MapOptions(
+                      maxZoom: 19,
+                      minZoom: 5,
+                      zoom: 16,
+                      center: _currentPosition,
+                      onPositionChanged:
+                          (MapPosition position, bool hasGesture) {
+                        if (hasGesture &&
+                            _followOnLocationUpdate !=
+                                FollowOnLocationUpdate.never) {
+                          setState(() {
+                            _followOnLocationUpdate =
+                                FollowOnLocationUpdate.never;
+                          });
+                        }
+                      }),
+                  nonRotatedChildren: [
+                    Positioned(
+                      right: 20,
+                      top: 20,
+                      child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: () {
+                            // Follow the location marker on the map when location updated until user interact with the map.
+                            setState(
+                              () => _followOnLocationUpdate =
+                                  FollowOnLocationUpdate.always,
+                            );
+                            // Follow the location marker on the map and zoom the map to level 18.
+                            _followCurrentLocationStreamController.add(18);
+                          },
+                          child: Icon(
+                            Icons.my_location,
+                            color: HexColor("#ef9904"),
+                          )),
+                    ),
+                  ],
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          "https://api.mapbox.com/styles/v1/kinton/clfnisen4000001rrhl74psie/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia2ludG9uIiwiYSI6ImNsMmNzb3ptMTAyODczbHA3c2UyMGlpaHkifQ.Y3y9ZhRTEf5pBN1fjlRrrg",
+                      additionalOptions: const {
+                        'mapStyleId': AppConstants.mapboxStyleId,
+                        'accessToken': AppConstants.mapboxAccessToken,
+                      },
+                    ),
+                    CurrentLocationLayer(
+                      followCurrentLocationStream:
+                          _followCurrentLocationStreamController.stream,
+                      followOnLocationUpdate: _followOnLocationUpdate,
+                      turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+                      style: LocationMarkerStyle(
+                        marker: const DefaultLocationMarker(
+                          color: Colors.white,
+                          child: Icon(
+                            Icons.navigation,
+                            color: Colors.blue,
                           ),
-                          markerSize: const Size.square(40),
-                          markerDirection: MarkerDirection.heading,
-                          accuracyCircleColor: Colors.blue.withOpacity(0.1),
-                          showAccuracyCircle: true,
                         ),
-                        moveAnimationDuration: Duration.zero,
-                      )
-                    ],
-                  )
-                ],
-              );
-            },
-          );
-        }));
+                        markerSize: const Size.square(40),
+                        markerDirection: MarkerDirection.heading,
+                        accuracyCircleColor: Colors.blue.withOpacity(0.1),
+                        showAccuracyCircle: true,
+                      ),
+                      moveAnimationDuration: Duration.zero,
+                    )
+                  ],
+                )
+              ],
+            );
+          },
+        ));
   }
 }
