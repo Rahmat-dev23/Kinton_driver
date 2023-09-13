@@ -1,0 +1,49 @@
+workflows:
+  ios-release:
+    name: Kinton Driver
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: development
+        bundle_identifier: com.ngodev.kinton_driver
+      flutter: stable
+      cocoapods: default
+    scripts:
+      - name: Get Flutter Packages
+        script: |
+          flutter packages pub get
+      - name: Pod install
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Flutter build ipa and automatic versioning
+        script: |
+          flutter build ipa --release \
+          --build-name=1.0.0 \
+          --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
+          --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      scripts:
+        - name: Crashlytics
+          script: |
+            echo "Find build artifacts"
+             dsymPath=$(find $CM_BUILD_DIR/build/ios/archive/Runner.xcarchive -name "*.dSYM" | head -1)
+             if [[ -z ${dsymPath} ]]
+             then
+               echo "No debug symbols were found, skip publishing to Firebase Crashlytics"
+             else
+               echo "Publishing debug symbols from $dsymPath to Firebase Crashlytics"
+               ls -d -- ios/Pods/*
+               $CM_BUILD_DIR/ios/Pods/FirebaseCrashlytics/upload-symbols \
+                 -gsp ios/Runner/GoogleService-Info.plist \
+                 -p ios $dsymPath
+             fi
