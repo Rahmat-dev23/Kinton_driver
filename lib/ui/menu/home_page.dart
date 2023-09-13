@@ -7,6 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../helpers/AppConstant.dart';
 import '../../helpers/CurrencyFormat.dart';
@@ -24,6 +25,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   LatLng? _currentPosition;
   var collection = FirebaseFirestore.instance;
   LatLng basePosition = const LatLng(-3.2087078074640756, 104.64408488084912);
@@ -47,6 +49,12 @@ class _HomePageState extends State<HomePage> {
     _getCurrentLocationFuture = getLocation();
     _followOnLocationUpdate = FollowOnLocationUpdate.always;
     _followCurrentLocationStreamController = StreamController<double?>();
+  }
+
+  Future<PermissionStatus> checkPermission() async {
+    final status = await Permission.location.request();
+
+    return status;
   }
 
   getLocation() async {
@@ -150,10 +158,12 @@ class _HomePageState extends State<HomePage> {
           ),
           backgroundColor: HexColor("#ef9904"),
         ),
-        body: FutureBuilder(
-          future: _getCurrentLocationFuture,
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        body: FutureBuilder(future: checkPermission(), builder: (context,snapshot){
 
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(snapshot.data.toString())));
+          return FutureBuilder(
+            future: _getCurrentLocationFuture,
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               return Stack(
                 fit: StackFit.loose,
                 children: [
@@ -183,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () {
                               // Follow the location marker on the map when location updated until user interact with the map.
                               setState(
-                                () => _followOnLocationUpdate =
+                                    () => _followOnLocationUpdate =
                                     FollowOnLocationUpdate.always,
                               );
                               // Follow the location marker on the map and zoom the map to level 18.
@@ -197,18 +207,38 @@ class _HomePageState extends State<HomePage> {
                     ],
                     children: [
                       TileLayer(
-                        urlTemplate: "https://api.mapbox.com/styles/v1/kinton/clfnisen4000001rrhl74psie/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia2ludG9uIiwiYSI6ImNsMmNzb3ptMTAyODczbHA3c2UyMGlpaHkifQ.Y3y9ZhRTEf5pBN1fjlRrrg",
-                      additionalOptions: const{
-                        'mapStyleId': AppConstants.mapboxStyleId,
-                        'accessToken': AppConstants.mapboxAccessToken,
-                      },
+                        urlTemplate:
+                        "https://api.mapbox.com/styles/v1/kinton/clfnisen4000001rrhl74psie/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1Ijoia2ludG9uIiwiYSI6ImNsMmNzb3ptMTAyODczbHA3c2UyMGlpaHkifQ.Y3y9ZhRTEf5pBN1fjlRrrg",
+                        additionalOptions: const {
+                          'mapStyleId': AppConstants.mapboxStyleId,
+                          'accessToken': AppConstants.mapboxAccessToken,
+                        },
+                      ),
+                      CurrentLocationLayer(
+                        followCurrentLocationStream: _followCurrentLocationStreamController.stream,
+                        followOnLocationUpdate: _followOnLocationUpdate,
+                        turnOnHeadingUpdate: TurnOnHeadingUpdate.never,
+                        style:  LocationMarkerStyle(
+                          marker: const DefaultLocationMarker(
+                            color: Colors.white,
+                            child: Icon(
+                              Icons.navigation,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          markerSize: const Size.square(40),
+                          markerDirection: MarkerDirection.heading,
+                          accuracyCircleColor: Colors.blue.withOpacity(0.1),
+                          showAccuracyCircle: true,
+                        ),
+                        moveAnimationDuration: Duration.zero,
                       )
                     ],
                   )
                 ],
               );
-            }
-          ,
-        ));
+            },
+          );
+        }));
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,9 @@ Future main() async {
 
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
+
 
 
 
