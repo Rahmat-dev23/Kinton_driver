@@ -3,13 +3,14 @@ import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:kinton_driver/firebase_options.dart';
 import 'package:kinton_driver/helpers/HexColor.dart';
+import 'package:kinton_driver/ui/home_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-
-  await Firebase.initializeApp();
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
@@ -53,10 +54,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
         useMaterial3: true,
       ),
-      home:  TextButton(
-        onPressed: () => throw Exception(),
-        child: const Text("Throw Test Exception"),
-      ),
+      home: const HomePage(),
     );
   }
 }
