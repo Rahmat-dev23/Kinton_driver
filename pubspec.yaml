@@ -43,6 +43,10 @@ dependencies:
   flutter_session_manager: ^1.0.3
   google_fonts: ^5.1.0
   cloud_firestore: ^4.9.1
+  flutter_map: ^5.0.0
+  latlong2: ^0.9.0
+  geolocator: ^10.0.1
+  flutter_map_location_marker: ^7.0.5
 
 dev_dependencies:
   flutter_test:

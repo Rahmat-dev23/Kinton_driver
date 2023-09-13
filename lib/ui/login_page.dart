@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:kinton_driver/ui/home_page.dart';
+import 'package:kinton_driver/ui/menu/home_page.dart';
+import 'package:kinton_driver/ui/layout_navigation_bar.dart';
 import '../helpers/HexColor.dart';
 import '../internet_services/ApiClient.dart';
 
@@ -82,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         sessionManager.set("token", token);
         sessionManager.set("isLoggedIn", true);
 
-        return HomePage();
+        return LayoutNavigationBar(accesstoken: token);
       }));
     }
   }
