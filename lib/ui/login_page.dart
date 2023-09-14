@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:kinton_driver/ui/menu/home_page.dart';
 import 'package:kinton_driver/ui/layout_navigation_bar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../helpers/HexColor.dart';
 import '../internet_services/ApiClient.dart';
 
@@ -20,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final ApiClient _apiClient = ApiClient();
   bool showPassword = true;
+
+
 
   Future<void> loginDriver() async {
     if (_formKey.currentState!.validate()) {
@@ -46,15 +48,48 @@ class _LoginPageState extends State<LoginPage> {
         String token = decodedResponse['token'];
 
         if (isStatus == "accept") {
-          if (!context.mounted) return;
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-                var sessionManager = SessionManager();
-                sessionManager.set("token", token);
-                sessionManager.set("isLoggedIn", true);
 
-                return LayoutNavigationBar(accessToken: token);
-              }));
+          if (!context.mounted) return;
+          final status =  await checkPermission(Permission.location, context);
+
+          if(status.isGranted){
+            if (!context.mounted) return;
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
+                  var sessionManager = SessionManager();
+                  sessionManager.set("token", token);
+                  sessionManager.set("isLoggedIn", true);
+
+                  return LayoutNavigationBar(accessToken: token);
+                }));
+          }else{
+            if (!context.mounted) return;
+            showDialog(context: context, builder: (context1){
+
+
+              return AlertDialog(
+                title: const Text("Berikan Perizinan Lokasi"),
+                content: Icon(Icons.location_on_rounded,color: HexColor("#ef9904"),),
+                actions: [
+                  ElevatedButton(
+                    onPressed: (){
+                      checkPermission(Permission.location, context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(13),
+                        backgroundColor: HexColor("#ef9904")),
+                    child: const Text(
+                      "MINTA PERIZINAN",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            });
+          }
+
         } else {
           if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -87,6 +122,13 @@ class _LoginPageState extends State<LoginPage> {
       }));
     }
   }
+
+  Future<PermissionStatus> checkPermission(PermissionWithService location, context) async {
+    final status = await location.request();
+
+   return status;
+  }
+
 
 
   @override

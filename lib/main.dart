@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:kinton_driver/firebase_options.dart';
-import 'package:kinton_driver/helpers/HexColor.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:kinton_driver/ui/layout_navigation_bar.dart';
 import 'package:kinton_driver/ui/login_page.dart';
+
+import 'firebase_options.dart';
+import 'helpers/HexColor.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,24 +23,34 @@ Future main() async {
     return true;
   };
 
+
   // final fcmToken = await FirebaseMessaging.instance.getToken();
 
 
-  runApp(const MyApp());
+  dynamic token = SessionManager().get("token");
+
+  runApp(MaterialApp(
+    home: token!=''? LayoutNavigationBar(accessToken: token) : const MyApp(),
+  ));
 
 }
 
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-  const MyApp({super.key});
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
 
+  Future<void> checkLogin() async {
 
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
       title: 'Kinton Driver',
       theme: ThemeData(
@@ -61,7 +73,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const LoginPage()
     );
   }
 }

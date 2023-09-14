@@ -31,6 +31,10 @@ class _IncomePageState extends State<IncomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: const Text("Pendapatan"),
+      ),
       body: FutureBuilder(
         future: getUserData(),
         builder: (context, snapshot) {
@@ -70,6 +74,7 @@ class _IncomePageState extends State<IncomePage> {
                           borderRadius: BorderRadius.all(Radius.circular(15))),
                       color: Colors.white,
                       child: Container(
+                        color: Colors.white,
                         padding: const EdgeInsets.all(7),
                         child: Text(
                           snapshot.error.toString(),
@@ -150,6 +155,7 @@ Widget totalCard(today, String isToday, String policeNumber) {
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 color: Colors.white,
                 child: Container(
+                  color: Colors.white,
                   padding: const EdgeInsets.all(7),
                   child: Text(
                     snapshot.error.toString(),
@@ -172,6 +178,7 @@ Widget totalCard(today, String isToday, String policeNumber) {
           }
 
           return Card(
+            color: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             elevation: 2,
             margin: const EdgeInsets.all(8),
@@ -295,6 +302,7 @@ Widget finishedOrderCard(
   }
 
   return Card(
+    color: Colors.white,
     elevation: 2,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     margin: const EdgeInsets.all(8),

@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
         body: FutureBuilder(
           future: _getCurrentLocationFuture,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            checkPermission(Permission.location, context);
+
             return Stack(
               fit: StackFit.loose,
               children: [

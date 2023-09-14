@@ -165,6 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Card(
+                            color: Colors.white,
                             elevation: 5,
                             shape: const RoundedRectangleBorder(
                               borderRadius:
@@ -184,6 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             )),
                         Card(
+                          color: Colors.white,
                           elevation: 5,
                           margin: const EdgeInsets.only(top: 15),
                           shape: const RoundedRectangleBorder(
@@ -243,6 +245,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     return const LoginPage();
                                                   }));
                                         },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: HexColor("#ef9904"),
+                                          padding: const EdgeInsets.all(10),
+                                        ),
                                         child: (const Text(
                                           "UBAH",
                                           style: TextStyle(
@@ -268,6 +274,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     }));
                               },
                               style: ElevatedButton.styleFrom(
+                                backgroundColor: HexColor("#ef9904"),
                                 padding: const EdgeInsets.all(10),
                               ),
                               child: (const Text("KELUAR",
