@@ -69,22 +69,25 @@ class _LoginPageState extends State<LoginPage> {
 
               return AlertDialog(
                 title: const Text("Berikan Perizinan Lokasi"),
-                content: Icon(Icons.location_on_rounded,color: HexColor("#ef9904"),),
+                content: Icon(Icons.location_on_rounded,color: HexColor("#ef9904"),
+                size: 25,),
                 actions: [
-                  ElevatedButton(
-                    onPressed: (){
-                      checkPermissionD(Permission.location, context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(13),
-                        backgroundColor: HexColor("#ef9904")),
-                    child: const Text(
-                      "MINTA PERIZINAN",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ),
+                 Center(
+                   child:  ElevatedButton(
+                     onPressed: (){
+                       checkPermissionLocation(Permission.location, context,token);
+                     },
+                     style: ElevatedButton.styleFrom(
+                         padding: const EdgeInsets.all(13),
+                         backgroundColor: HexColor("#ef9904")),
+                     child: const Text(
+                       "MINTA PERIZINAN",
+                       style: TextStyle(
+                           fontWeight: FontWeight.bold,
+                           color: Colors.white),
+                     ),
+                   ),
+                 )
                 ],
               );
             });
@@ -123,12 +126,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> checkPermissionD(PermissionWithService location, context) async {
+  Future<void> checkPermissionLocation(PermissionWithService location, BuildContext context, String token) async {
     final status = await location.request();
 
     if(status.isGranted){
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi diizinkan")));
+      if (!context.mounted) return;
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) {
+            var sessionManager = SessionManager();
+            sessionManager.set("token", token);
+            sessionManager.set("isLoggedIn", true);
+
+            return LayoutNavigationBar(accessToken: token);
+          }));
     }else{
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi tidak diizinkan")));
     }
 
