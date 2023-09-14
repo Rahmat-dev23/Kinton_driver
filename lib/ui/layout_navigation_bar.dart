@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kinton_driver/helpers/HexColor.dart';
+import 'package:kinton_driver/helpers/hex_color.dart';
 import 'package:kinton_driver/ui/menu/home_page.dart';
 import 'package:kinton_driver/ui/menu/income_page.dart';
 
@@ -9,9 +9,9 @@ import 'menu/profile_page.dart';
 class LayoutNavigationBar extends StatefulWidget {
 
 
-  String accessToken;
+  final String accessToken;
 
-  LayoutNavigationBar({super.key, required this.accessToken});
+  const LayoutNavigationBar({super.key, required this.accessToken});
 
   @override
   State<LayoutNavigationBar> createState() => _LayoutNavigationBarState();
@@ -28,10 +28,10 @@ class _LayoutNavigationBarState extends State<LayoutNavigationBar> {
 
     _children = [
       HomePage(
-        accesstoken: widget.accessToken,
+         accessToken: widget.accessToken,
       ),
-       IncomePage(accesstoken: widget.accessToken),
-      ProfilePage(accesstoken: widget.accessToken,),
+       IncomePage(accessToken: widget.accessToken),
+      ProfilePage(accessToken: widget.accessToken,),
     ];
   }
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:kinton_driver/ui/layout_navigation_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../helpers/HexColor.dart';
+import '../helpers/hex_color.dart';
 import '../internet_services/ApiClient.dart';
 
 class LoginPage extends StatefulWidget {

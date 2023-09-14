@@ -8,7 +8,7 @@ import 'package:kinton_driver/ui/layout_navigation_bar.dart';
 import 'package:kinton_driver/ui/login_page.dart';
 
 import 'firebase_options.dart';
-import 'helpers/HexColor.dart';
+import 'helpers/hex_color.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

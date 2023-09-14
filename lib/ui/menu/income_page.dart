@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:intl/intl.dart';
 
-import '../../helpers/CurrencyFormat.dart';
-import '../../helpers/HexColor.dart';
+import '../../helpers/currency_format.dart';
+import '../../helpers/hex_color.dart';
 import '../../internet_services/ApiClient.dart';
 import '../../models/DriverModel.dart';
 
 class IncomePage extends StatefulWidget {
-  String accesstoken;
-  IncomePage({super.key, required this.accesstoken});
+  final String accessToken;
+  const IncomePage({super.key, required this.accessToken});
 
   @override
   State<IncomePage> createState() => _IncomePageState();

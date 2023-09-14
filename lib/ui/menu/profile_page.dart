@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
-import '../../helpers/CurrencyFormat.dart';
-import '../../helpers/HexColor.dart';
+import '../../helpers/currency_format.dart';
+import '../../helpers/hex_color.dart';
 import '../../internet_services/ApiClient.dart';
 import '../../internet_services/path.dart';
 import '../../models/DriverModel.dart';
 import '../login_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  String accesstoken;
-  ProfilePage({super.key, required this.accesstoken});
+  final String accessToken;
+  const ProfilePage({super.key, required this.accessToken});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();

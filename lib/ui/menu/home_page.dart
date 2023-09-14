@@ -9,16 +9,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../helpers/AppConstant.dart';
-import '../../helpers/CurrencyFormat.dart';
-import '../../helpers/HexColor.dart';
+import '../../helpers/app_constant.dart';
+import '../../helpers/currency_format.dart';
+import '../../helpers/hex_color.dart';
 import '../../internet_services/ApiClient.dart';
 import '../../models/DriverModel.dart';
 
 class HomePage extends StatefulWidget {
-  String accesstoken;
+  final String accessToken;
 
-  HomePage({super.key, required this.accesstoken});
+  const HomePage({super.key, required this.accessToken});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
   final ApiClient _apiClient = ApiClient();
 
   Future<DriverModel> getUserData() async {
-    dynamic userRes = await _apiClient.getUserProfileData(widget.accesstoken);
+    dynamic userRes = await _apiClient.getUserProfileData(widget.accessToken);
     return DriverModel.fromJson(userRes as Map);
   }
 
@@ -87,12 +87,12 @@ class _HomePageState extends State<HomePage> {
     var router =
         jsonDecode(userRes.body)['routes'][0]['geometry']['coordinates'];
     for (int i = 0; i < router.length; i++) {
-      var reep = router[i].toString();
-      reep = reep.replaceAll("[", "");
-      reep = reep.replaceAll("]", "");
+      var rep = router[i].toString();
+      rep = rep.replaceAll("[", "");
+      rep = rep.replaceAll("]", "");
 
-      var lat1 = reep.split(',');
-      var lon1 = reep.split(',');
+      var lat1 = rep.split(',');
+      var lon1 = rep.split(',');
       routePoints.add(LatLng(double.parse(lat1[1]), double.parse(lon1[0])));
     }
 
@@ -235,9 +235,107 @@ class _HomePageState extends State<HomePage> {
                         showAccuracyCircle: true,
                       ),
                       moveAnimationDuration: Duration.zero,
-                    )
+                    ),
+
                   ],
-                )
+                ),
+                Positioned(
+                    top: 5,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: FutureBuilder(
+                        future: getUserData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Card(
+                                elevation: 6,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                                color: Colors.white,
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: const Text(
+                                    "Error",
+                                    style: TextStyle(
+                                        color: Colors.amber,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ));
+                          }
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Card(
+                                elevation: 6,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(25))),
+                                color: Colors.white,
+                                child: Container(
+                                  padding: const EdgeInsets.all(7),
+                                  child: const CircularProgressIndicator(),
+                                ));
+                          }
+                          late String isActive;
+                          late String colorStatus;
+                          late String token;
+
+                          if (snapshot.hasData) {
+                            token = snapshot.data!.id_driver;
+                            if (snapshot.data!.is_active == "true") {
+                              isActive = "Online";
+                              colorStatus = "#ef9904";
+                            } else {
+                              isActive = "Offline";
+                              colorStatus = "#cf1204";
+                            }
+                          }
+                          return Card(
+                              elevation: 6,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(25))),
+                              color: Colors.white,
+                              child: Container(
+                                  padding: const EdgeInsets.fromLTRB(15, 6, 15, 6),
+                                  child: GestureDetector(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.power_settings_new_rounded,
+                                          color: HexColor(colorStatus),
+                                        ),
+                                        Text(
+                                          isActive,
+                                          style: TextStyle(
+                                              color: HexColor(colorStatus),
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      var isLoading = true;
+                                      if (isActive == "Online") {
+                                        setState(() {
+                                          isLoading = false;
+                                          updateStatus(token, "false");
+                                        });
+                                      } else {
+                                        setState(() {
+                                          isLoading = false;
+                                          updateStatus(token, "true");
+                                        });
+                                      }
+
+                                      if (isLoading) {
+                                        const CircularProgressIndicator();
+                                      }
+                                    },
+                                  )));
+                        },
+                      )),
+                ),
               ],
             );
           },
