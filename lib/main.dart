@@ -21,7 +21,7 @@ Future main() async {
     return true;
   };
 
-  final fcmToken = await FirebaseMessaging.instance.getToken();
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
 
 
   runApp(const MyApp());
