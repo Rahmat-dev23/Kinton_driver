@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 actions: [
                   ElevatedButton(
                     onPressed: (){
-                      checkPermission(Permission.location, context);
+                      checkPermissionD(Permission.location, context);
                     },
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(13),
@@ -121,6 +121,17 @@ class _LoginPageState extends State<LoginPage> {
         return LayoutNavigationBar(accessToken: token,);
       }));
     }
+  }
+
+  Future<void> checkPermissionD(PermissionWithService location, context) async {
+    final status = await location.request();
+
+    if(status.isGranted){
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi diizinkan")));
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi tidak diizinkan")));
+    }
+
   }
 
   Future<PermissionStatus> checkPermission(PermissionWithService location, context) async {

@@ -49,7 +49,7 @@ Future main() async {
       colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
       useMaterial3: true,
     ),
-    home:const LoginPage(),
+    home: token!=null? LayoutNavigationBar(accessToken: token) : const LoginPage(),
   ));
 
 }
