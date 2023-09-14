@@ -50,48 +50,15 @@ class _LoginPageState extends State<LoginPage> {
         if (isStatus == "accept") {
 
           if (!context.mounted) return;
-          final status =  await checkPermission(Permission.location, context);
+          if (!context.mounted) return;
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+                var sessionManager = SessionManager();
+                sessionManager.set("token", token);
+                sessionManager.set("isLoggedIn", true);
 
-          if(status.isGranted){
-            if (!context.mounted) return;
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-                  var sessionManager = SessionManager();
-                  sessionManager.set("token", token);
-                  sessionManager.set("isLoggedIn", true);
-
-                  return LayoutNavigationBar(accessToken: token);
-                }));
-          }else{
-            if (!context.mounted) return;
-            showDialog(context: context, builder: (context1){
-
-
-              return AlertDialog(
-                title: const Text("Berikan Perizinan Lokasi"),
-                content: Icon(Icons.location_on_rounded,color: HexColor("#ef9904"),
-                size: 55,),
-                actions: [
-                 Center(
-                   child:  ElevatedButton(
-                     onPressed: (){
-                       checkPermissionLocation(Permission.location, context,token);
-                     },
-                     style: ElevatedButton.styleFrom(
-                         padding: const EdgeInsets.all(13),
-                         backgroundColor: HexColor("#ef9904")),
-                     child: const Text(
-                       "MINTA PERIZINAN",
-                       style: TextStyle(
-                           fontWeight: FontWeight.bold,
-                           color: Colors.white),
-                     ),
-                   ),
-                 )
-                ],
-              );
-            });
-          }
+                return LayoutNavigationBar(accessToken: token);
+              }));
 
         } else {
           if (!context.mounted) return;

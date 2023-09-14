@@ -50,17 +50,15 @@ class _HomePageState extends State<HomePage> {
     _followCurrentLocationStreamController = StreamController<double?>();
   }
 
-  Future<void> checkPermission(PermissionWithService location, context) async {
-    final status = await location.request();
+  getLocation() async {
+    PermissionStatus locationPermission = await Permission.location.request();
 
-    if (status.isGranted) {
+    if (locationPermission.isGranted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi diizinkan")));
     }else{
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi tidak diizinkan")));
     }
-  }
 
-  getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
         forceAndroidLocationManager: true,

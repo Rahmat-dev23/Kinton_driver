@@ -51,48 +51,13 @@ Future main() async {
       colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
       useMaterial3: true,
     ),
-    home: MyApp()
+    home: const LoginPage()
   ));
 
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) :super(key: key);
 
 
-  @override
-  State<StatefulWidget> createState() =>_MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-
-  Future<void> checkPermissionLocation(PermissionWithService location, context) async {
-    final status = await location.request();
-
-    if (status.isGranted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi diizinkan")));
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi tidak diizinkan")));
-    }
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return
-      ElevatedButton(
-        onPressed: (){
-           Permission.location.request();
-
-        },
-        child: Text("lokasi"),
-      );
-
-  }
-
-
-
-}
 
 
 
