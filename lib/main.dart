@@ -82,7 +82,8 @@ class _MyAppState extends State<MyApp> {
     return
       ElevatedButton(
         onPressed: (){
-          checkPermissionLocation(Permission.location,context );
+           Permission.location.request();
+
         },
         child: Text("lokasi"),
       );
