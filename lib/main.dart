@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:kinton_driver/ui/layout_navigation_bar.dart';
 import 'package:kinton_driver/ui/login_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'firebase_options.dart';
 import 'helpers/hex_color.dart';
@@ -50,8 +51,45 @@ Future main() async {
       colorScheme: ColorScheme.fromSeed(seedColor: HexColor("#ef9904")),
       useMaterial3: true,
     ),
-    home: const LoginPage(),
+    home: MyApp()
   ));
+
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) :super(key: key);
+
+
+  @override
+  State<StatefulWidget> createState() =>_MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  Future<void> checkPermissionLocation(PermissionWithService location, context) async {
+    final status = await location.request();
+
+    if (status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi diizinkan")));
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Lokasi tidak diizinkan")));
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      ElevatedButton(
+        onPressed: (){
+          checkPermissionLocation(Permission.location,context );
+        },
+        child: Text("lokasi"),
+      );
+
+  }
+
+
 
 }
 

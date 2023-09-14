@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               return AlertDialog(
                 title: const Text("Berikan Perizinan Lokasi"),
                 content: Icon(Icons.location_on_rounded,color: HexColor("#ef9904"),
-                size: 25,),
+                size: 55,),
                 actions: [
                  Center(
                    child:  ElevatedButton(
